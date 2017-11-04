@@ -1,0 +1,3 @@
+FROM grafana/grafana
+ENV GF_DASHBOARDS_JSON_ENABLED=true
+COPY /config/dashboards/RabbitMQ.json /var/lib/grafana/dashboards/RabbitMQ.json

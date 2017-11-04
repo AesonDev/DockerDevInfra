@@ -1,0 +1,54 @@
+version: '3'
+services:
+
+  elasticsearch:
+    build: ./Containers/Elk-Dev/
+    container_name: elk
+    image: gjaminon/elk:dev
+    ports: 
+      - "9200:9200"
+      - "5601:5601"
+    networks: 
+      - dev_infra   
+
+  rabbitmq:
+    build: ./Containers/RabbitMQ/
+    container_name: rabbitmq-dev
+    image: gjaminon/rabbitmq:dev
+    ports: 
+      - "15672:15672"
+      - "5672:5672"
+    networks: 
+      - dev_infra
+
+  prometheus-dev:
+    build: ./Containers/Prometheus/
+    container_name: prometheus-dev
+    image: gjaminon/prometheus:dev
+    ports: 
+      - "9090:9090"
+    networks: 
+      - dev_infra
+
+  grafana-dev:
+    build: ./Containers/Grafana/
+    container_name: grafana-dev
+    image: gjaminon/grafana:dev
+    ports:
+      - "3000:3000"
+    networks: 
+      - dev_infra
+
+  grafana-config:
+    build: ./Containers/Grafana-Config/
+    container_name: grafana-config-dev
+    image: gjaminon/grafanaconfig
+    entrypoint:  bash -c ./config.sh
+    networks: 
+      - dev_infra
+    depends_on: 
+      - grafana-dev
+
+networks: 
+  dev_infra:
+    driver: bridge
